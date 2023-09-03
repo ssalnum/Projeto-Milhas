@@ -4,6 +4,7 @@ import { CriaDepoimentoDTO } from "./dto/criaDepoimento.dto";
 import { DepoimentoEntity } from "./depoimento.entity";
 import { ListaDepoimentosDTO } from "./dto/listaDepoimentos.dto";
 import { AtualizaDepoimentoDTO } from "./dto/atualizaDepoimento.dto";
+import { v4 as uuid } from "uuid"
 
 @Controller('/depoimentos')
 export class DepoimentoController {
@@ -13,14 +14,15 @@ export class DepoimentoController {
     @Post()
     async criaDepoimento(@Body() dadosDepoimento: CriaDepoimentoDTO) {
         const depoimentoEntity = new DepoimentoEntity();
+        depoimentoEntity.id = uuid()
         depoimentoEntity.foto = dadosDepoimento.foto;
         depoimentoEntity.depoimento = dadosDepoimento.depoimento;
         depoimentoEntity.nome = dadosDepoimento.nome;
 
-        this.depoimentoRepository.salvar(dadosDepoimento);
+        this.depoimentoRepository.salvar(depoimentoEntity);
 
         return {
-            depoimento: new ListaDepoimentosDTO(depoimentoEntity.depoimento, depoimentoEntity.nome),
+            depoimento: new ListaDepoimentosDTO(depoimentoEntity.id),
             message: "Depoimento criado com sucesso!"
         }
     }
@@ -30,8 +32,7 @@ export class DepoimentoController {
         const depoimentosSalvos = await this.depoimentoRepository.listar();
         const depoimentosLista = depoimentosSalvos.map(
             depoimento => new ListaDepoimentosDTO(
-                depoimento.depoimento,
-                depoimento.nome
+                depoimento.id,
             )
         );
 
@@ -39,8 +40,8 @@ export class DepoimentoController {
     }
 
     @Put('/:id')
-    async atualizaDepoimento(@Param('id') nome: string, @Body() novosDados: AtualizaDepoimentoDTO) {
-        const depoimentoAtualizado = await this.depoimentoRepository.atualizar(nome, novosDados)
+    async atualizaDepoimento(@Param('id') id: string, @Body() novosDados: AtualizaDepoimentoDTO) {
+        const depoimentoAtualizado = await this.depoimentoRepository.atualizar(id, novosDados)
 
         return {
             depoimento: depoimentoAtualizado,

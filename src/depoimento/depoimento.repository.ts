@@ -14,9 +14,9 @@ export class DepoimentoRepository {
         return this.depoimentos;
     }
 
-    private buscaPorNome(nome: string) {
+    private buscaPorId(id: string) {
         const possivelDepoimento = this.depoimentos.find(
-            depoimentoSalvo => depoimentoSalvo.nome === nome
+            depoimentoSalvo => depoimentoSalvo.id === id
         );
 
         if(!possivelDepoimento) {
@@ -26,11 +26,11 @@ export class DepoimentoRepository {
         return possivelDepoimento;
     }
 
-    async atualizar(nome: string, novosDados: Partial<DepoimentoEntity>) {
-        const depoimento = this.buscaPorNome(nome);
+    async atualizar(id: string, novosDados: Partial<DepoimentoEntity>) {
+        const depoimento = this.buscaPorId(id);
 
         Object.entries(novosDados).forEach(([chave, valor]) => {
-            if(chave === nome) {
+            if(chave === id) {
                 return;
             }
 
@@ -40,10 +40,10 @@ export class DepoimentoRepository {
         return depoimento;
     }
 
-    async remove(nome: string) {
-        const depoimento = this.buscaPorNome(nome);
+    async remove(id: string) {
+        const depoimento = this.buscaPorId(id);
         this.depoimentos = this.depoimentos.filter(
-            depoimentoSalvo => depoimentoSalvo.nome !== nome
+            depoimentoSalvo => depoimentoSalvo.id !== id
         );
 
         return depoimento
