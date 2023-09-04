@@ -3,11 +3,18 @@ import { DepoimentoEntity } from "./depoimento.entity";
 
 @Injectable()
 export class DepoimentoRepository {
-    private depoimentos: DepoimentoEntity[] = [];
+    private depoimentos: DepoimentoEntity[] = [
+        {
+            id: "1",
+            foto: "foto",
+            depoimento: "depoimento",
+            nome: "nome"
+        }
+    ];
 
     async salvar(depoimento) {
         this.depoimentos.push(depoimento);
-        console.log(this.depoimentos);
+        //console.log(this.depoimentos);
     }
 
     async listar() {

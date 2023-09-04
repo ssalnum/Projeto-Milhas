@@ -49,9 +49,9 @@ export class DepoimentoController {
         }
     }
 
-    @Delete('/:nome')
-    async removeDepoimento(@Param('nome') nome: string) {
-        const depoimentoRemovido = await this.depoimentoRepository.remove(nome);
+    @Delete('/:id')
+    async removeDepoimento(@Param('id') id: string) {
+        const depoimentoRemovido = await this.depoimentoRepository.remove(id);
 
         return {
             depoimento: depoimentoRemovido,

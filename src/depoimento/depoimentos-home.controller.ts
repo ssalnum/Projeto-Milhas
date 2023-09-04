@@ -1,5 +1,6 @@
 import { Controller, Get } from "@nestjs/common";
 import { DepoimentoRepository } from "./depoimento.repository";
+import { ListaDepoimentosHomeDTO } from "./dto/listaDepoimentosHome.dto";
 
 @Controller('/depoimentos-home')
 export class DepoimentosHomeController {
@@ -9,6 +10,23 @@ export class DepoimentosHomeController {
     @Get()
     async listaDepoimentos() {
         const depoimentosSalvos = await this.depoimentoRepository.listar();
-        return depoimentosSalvos;
+        const tresDepoimentos = this.tresDepoimentos(depoimentosSalvos)
+
+        return tresDepoimentos;
+    }
+
+    private tresDepoimentos(depoimentosSalvos){
+        let depoimentos: ListaDepoimentosHomeDTO[] = [];
+
+        for(let i=0; i<3; i++) {
+            if(depoimentosSalvos[i]){
+                depoimentos.push(new ListaDepoimentosHomeDTO(
+                    depoimentosSalvos[i].foto,
+                    depoimentosSalvos[i].depoimento,
+                    depoimentosSalvos[i].nome,
+                ))
+            }
+        }
+        return depoimentos
     }
 }
